@@ -14,8 +14,7 @@ exports.create = (text, callback) => {
     } else {
       id = string;
       items[id] = text;
-      console.log('To-Do Action: ', text);
-      fs.writeFile(__dirname.concat(`/data/${id}.txt`), text, (err) => {
+      fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, (err) => {
         if (err) {
           throw 'Error';
         } else {
@@ -66,7 +65,6 @@ exports.delete = (id, callback) => {
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
 
 exports.dataDir = path.join(__dirname, 'data');
-console.log('path ', path.join(__dirname, 'data'));
 
 exports.initialize = () => {
   if (!fs.existsSync(exports.dataDir)) {
