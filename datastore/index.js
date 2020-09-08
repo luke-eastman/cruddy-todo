@@ -8,9 +8,22 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+  counter.getNextUniqueId((err, string) => {
+    if (err) {
+      throw 'Error';
+    } else {
+      id = string;
+      items[id] = text;
+      console.log('To-Do Action: ', text);
+      fs.writeFile(__dirname.concat(`/data/${id}.txt`), text, (err) => {
+        if (err) {
+          throw 'Error';
+        } else {
+          callback(null, { id, text });
+        }
+      });
+    }
+  });
 };
 
 exports.readAll = (callback) => {
@@ -53,6 +66,7 @@ exports.delete = (id, callback) => {
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
 
 exports.dataDir = path.join(__dirname, 'data');
+console.log('path ', path.join(__dirname, 'data'));
 
 exports.initialize = () => {
   if (!fs.existsSync(exports.dataDir)) {
