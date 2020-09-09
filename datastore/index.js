@@ -24,12 +24,20 @@ exports.create = (text, callback) => {
     }
   });
 };
-
+// fs.dir.read()
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  fs.readdir(exports.dataDir, (err, fileNames) => {
+    if (err) {
+      throw 'Error';
+    } else {
+      var data = [];
+      fileNames.forEach((file) => {
+        var id = file.slice(0, -4);
+        data.push({ id: id, text: id});
+      });
+      callback(null, data);
+    }
   });
-  callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
